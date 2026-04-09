@@ -1,0 +1,19 @@
+{
+  "name": "resumeai-pro",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:netlify": "npx netlify dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npx netlify deploy --prod"
+  },
+  "dependencies": {
+    "@google/genai": "^1.0.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
