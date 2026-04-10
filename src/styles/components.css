@@ -463,11 +463,105 @@
   gap: var(--space-sm);
 }
 
+/* ---- Upload Zone ---- */
+.upload-container {
+  margin-bottom: var(--space-xl);
+}
+
+.upload-zone {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-2xl) var(--space-xl);
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.upload-zone:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-light);
+  transform: translateY(-2px);
+}
+
+.upload-zone.drag-active {
+  background: rgba(124, 92, 247, 0.08);
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(124, 92, 247, 0.1);
+  transform: scale(1.01);
+}
+
+.upload-zone-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-xs);
+  transition: transform var(--transition-normal);
+}
+
+.upload-zone:hover .upload-zone-icon {
+  transform: scale(1.1) translateY(-4px);
+}
+
+.upload-zone-text h4 {
+  font-size: var(--font-lg);
+  margin-bottom: var(--space-xs);
+  color: var(--text-primary);
+}
+
+.upload-zone-text p {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+}
+
+.upload-loading {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 6, 26, 0.8);
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  z-index: 10;
+  animation: fadeIn 0.3s var(--ease-out);
+}
+
 /* ---- Divider ---- */
 .divider {
-  height: 1px;
-  background: var(--border);
+  display: flex;
+  align-items: center;
+  text-align: center;
   margin: var(--space-xl) 0;
+  color: var(--text-muted);
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+.divider:not(:empty)::before {
+  margin-right: var(--space-md);
+}
+
+.divider:not(:empty)::after {
+  margin-left: var(--space-md);
+}
+
+.divider span {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 /* ---- Empty State ---- */

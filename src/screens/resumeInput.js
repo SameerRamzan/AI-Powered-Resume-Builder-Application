@@ -3,17 +3,35 @@
    ============================================================ */
 
 import { wordCount } from '../utils/helpers.js';
+import { parseResumeFile } from '../services/fileParser.js';
 
 export function renderResumeInput(state) {
   return `
     <div class="input-screen animate-fade-in-up">
       <div class="input-screen-header">
-        <h2>📄 Paste Your Resume</h2>
+        <h2>📄 Add Your Resume</h2>
         <p class="text-secondary">
-          Paste your current resume text below. Don't worry about formatting —
-          our AI will analyze the content and structure.
+          Upload your resume file or paste the text below. Our AI works best with detailed content.
         </p>
       </div>
+
+      <div class="upload-container">
+        <label class="input-label">Upload Resume</label>
+        <div class="upload-zone" id="drop-zone">
+          <input type="file" id="file-input" accept=".pdf,.docx,.txt,.rtf" style="display: none;" />
+          <div class="upload-zone-icon">📁</div>
+          <div class="upload-zone-text">
+            <h4>Click to upload or drag and drop</h4>
+            <p>PDF, DOCX, TXT, or RTF (Max 10MB)</p>
+          </div>
+          <div id="upload-status" class="upload-loading" style="display: none;">
+            <div class="loading-spinner"></div>
+            <p id="upload-status-text">Extracting text...</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"><span>OR PASTE TEXT</span></div>
 
       <div class="input-group">
         <label class="input-label" for="resume-textarea">Resume Content</label>
@@ -82,6 +100,12 @@ export function initResumeInput(state, navigate) {
   const clearBtn = document.getElementById('clear-resume');
   const backBtn = document.getElementById('back-to-landing');
   const loadSampleBtn = document.getElementById('load-sample-resume');
+  
+  // File Upload Elements
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const uploadStatus = document.getElementById('upload-status');
+  const uploadStatusText = document.getElementById('upload-status-text');
 
   function updateState() {
     const text = textarea.value.trim();
@@ -94,6 +118,66 @@ export function initResumeInput(state, navigate) {
   if (state.resumeText) {
     updateState();
   }
+
+  /* ---- File Upload Logic ---- */
+  
+  dropZone.addEventListener('click', () => fileInput.click());
+
+  fileInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+      handleFile(e.target.files[0]);
+    }
+  });
+
+  // Drag and Drop
+  ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, false);
+  });
+
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
+  });
+
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
+  });
+
+  dropZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const file = dt.files[0];
+    if (file) handleFile(file);
+  });
+
+  async function handleFile(file) {
+    try {
+      uploadStatus.style.display = 'flex';
+      uploadStatusText.textContent = 'Extracting text...';
+      
+      const result = await parseResumeFile(file);
+      
+      textarea.value = result.text;
+      updateState();
+      
+      // Success animation
+      uploadStatusText.textContent = 'Ready!';
+      setTimeout(() => {
+        uploadStatus.style.display = 'none';
+      }, 800);
+      
+    } catch (error) {
+      console.error('File parsing failed:', error);
+      uploadStatusText.textContent = 'Error: ' + error.message;
+      setTimeout(() => {
+        uploadStatus.style.display = 'none';
+      }, 3000);
+    }
+  }
+
+  /* ---- Existing Events ---- */
+
 
   textarea.addEventListener('input', updateState);
 

@@ -11,7 +11,9 @@
     "deploy": "npx netlify deploy --prod"
   },
   "dependencies": {
-    "@google/genai": "^1.0.0"
+    "@google/genai": "^1.0.0",
+    "mammoth": "^1.12.0",
+    "pdfjs-dist": "^5.6.205"
   },
   "devDependencies": {
     "vite": "^6.0.0"
