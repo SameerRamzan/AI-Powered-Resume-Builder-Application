@@ -163,8 +163,3 @@ The prompt system is the heart of the application. It includes:
 - Test copy-to-clipboard and export functionality
 
 ---
-
-## Open Questions
-
-> [!IMPORTANT]
-> **API Key approach**: For this MVP, users provide their own Gemini API key (free at [aistudio.google.com](https://aistudio.google.com)). This means zero server costs but requires users to get a key. Is this acceptable, or would you prefer I add a simple backend proxy?
